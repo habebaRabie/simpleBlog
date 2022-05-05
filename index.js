@@ -12,11 +12,6 @@ db.authenticate().then(() => {
     console.error('Unable to connect to the database:', err);
 });
 
-const Post = require('./models/postModel');
-const Member = require('./models/memberModel');
-
-
-
 app.use("/member", require('./routes/memberRoute'));
 app.use("/post", require('./routes/postRoute'));
 

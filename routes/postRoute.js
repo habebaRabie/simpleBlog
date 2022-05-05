@@ -2,6 +2,7 @@ const express = require('express');
 const route = express.Router();
 const Post = require('../models/postModel');
 const verify = require('../middleware/verify');
+const upload = require('../middleware/upload');
 
 route.get('/', verify, async (req, res) => {
     try {
@@ -12,12 +13,12 @@ route.get('/', verify, async (req, res) => {
     }
 });
 
-route.post("/",verify, async (req,res) =>{
+route.post("/",verify, upload.single('headerIMG') ,async (req,res) =>{
     try{
         const newPost = await Post.create({
             title: req.body.title,
             body: req.body.body,
-            headerIMG: req.body.headerIMG,
+            headerIMG: req.file.path,
         });
         res.send(newPost);
     }
