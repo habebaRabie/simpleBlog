@@ -40,7 +40,9 @@ route.post("/login", async(req, res) => {
         if(member){
             const isValid = await bcrypt.compare(req.body.password, member.password);
             if(isValid){
-                const token = jwt.sign({email: member.email, committee: member.committee}, process.env.SECRET_KEY);
+                const token = jwt.sign({email: member.email, committee: member.committee}, process.env.SECRET_KEY,{
+                    expiresIn: "24h",
+                  });
                 res.send(token);
             }else{
                 res.send("invalid password");
@@ -56,11 +58,12 @@ route.post("/login", async(req, res) => {
 
 route.delete("/:email", async (req,res)=>{
     try{
-        await Member.destroy({
+        const member = await Member.findOne({
             where: {
                 email: req.params.email
             }
         });
+        await member.destroy();
         res.send("Member deleted successfully");
     }
     catch(err){

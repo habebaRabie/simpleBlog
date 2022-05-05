@@ -44,11 +44,9 @@ route.patch("/:id", verify, async (req,res)=>{
 
 route.delete("/:id",verify, async (req,res)=>{
     try{
-        await Post.destroy({
-            where: {
-                email: req.params.id
-            }
-        });
+        const post = await Post.findByPk(req.params.id);
+        await post.destroy();
+        res.send(post);
     }
     catch(err){
         res.send("something went wrong");

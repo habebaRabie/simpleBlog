@@ -11,11 +11,12 @@ module.exports = async(req,res,next) => {
     }
     jwt.verify(token, process.env.SECRET_KEY ,(err, result)=>{
         if(err) res.status(401).send("Invalid Token");
-        if(result.committee!="SMM")
-        {
+        if(result.committee!="SMM"){
             res.status(403).send("Forbidden");
+        }else{
+            req.user = result;
+            next();
         }
-        req.user = result;
-        next();
+        
     });
 }
